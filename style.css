@@ -19,7 +19,8 @@ section {
     margin-bottom: 2rem;
 }
 
-#competences .list-group-item.active {
+#competences .list-group-item.active, 
+#competences .list-group-item {
     background-color: #007bff;
     color: white;
     font-weight: bold;
