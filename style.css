@@ -71,3 +71,7 @@ a:hover {
     outline: 2px solid #0056b3;
     outline-offset: 2px;
 }
+
+.animate__animated {
+    --animate-duration: 1s;
+}

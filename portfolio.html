@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="bg-primary text-white text-center p-3">
+    <header class="bg-primary text-white text-center p-3" role="banner">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Rémi Mathieu</a>
@@ -24,6 +24,7 @@
                         <li class="nav-item"><a class="nav-link" href="#competences">Compétences</a></li>
                         <li class="nav-item"><a class="nav-link" href="#soft-skills">Soft Skills</a></li>
                         <li class="nav-item"><a class="nav-link" href="#projets">Projets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#projet-jeu">Jeu Feu-Eau</a></li>
                         <li class="nav-item"><a class="nav-link" href="#projets-scolaires">Projets Scolaires</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                         <li class="nav-item"><a class="nav-link" href="#cv">Télécharger CV</a></li>
@@ -36,21 +37,21 @@
     <main>
         <section id="accueil" class="text-center p-5 bg-light" role="main">
             <div class="container">
-                <h1 class="display-4">Bienvenue sur mon portfolio</h1>
-                <p class="lead">Je suis Rémi Mathieu, étudiant en informatique et passionné par le développement logiciel et le domaine spatial.</p>
+                <h1 class="display-4 animate__animated animate__fadeInDown">Bienvenue sur mon portfolio</h1>
+                <p class="lead animate__animated animate__fadeInUp">Je suis Rémi Mathieu, étudiant en informatique et passionné par le développement logiciel et le domaine spatial.</p>
             </div>
         </section>
 
         <section id="a-propos" class="p-5">
             <div class="container">
-                <h2>À propos</h2>
+                <h2 class="animate__animated animate__fadeInLeft">À propos</h2>
                 <p>Actuellement en deuxième année de BUT Informatique à l'IUT de Sophia Antipolis, j’ai acquis de solides compétences en développement logiciel et en gestion de projet. Mes expériences professionnelles chez MonacoDigital et Thales Alenia Space m'ont permis de développer une expertise en Java et Spring Boot.</p>
             </div>
         </section>
 
         <section id="experiences" class="p-5 bg-light">
             <div class="container">
-                <h2>Expériences</h2>
+                <h2 class="animate__animated animate__fadeInRight">Expériences</h2>
                 <div class="accordion" id="experienceAccordion">
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="headingOne">
@@ -104,7 +105,7 @@
 
         <section id="competences" class="p-5">
             <div class="container">
-                <h2>Compétences</h2>
+                <h2 class="animate__animated animate__fadeInLeft">Compétences</h2>
                 <div class="row">
                     <div class="col-md-4">
                         <ul class="list-group">
@@ -145,7 +146,7 @@
 
         <section id="soft-skills" class="p-5 bg-light">
             <div class="container">
-                <h2>Soft Skills</h2>
+                <h2 class="animate__animated animate__fadeInRight">Soft Skills</h2>
                 <ul class="list-group">
                     <li class="list-group-item"><i class="fas fa-users"></i> Capacité à travailler en équipe</li>
                     <li class="list-group-item"><i class="fas fa-lightbulb"></i> Curiosité et volonté d'apprendre</li>
@@ -158,10 +159,10 @@
 
         <section id="projets" class="p-5">
             <div class="container">
-                <h2>Projets</h2>
+                <h2 class="animate__animated animate__fadeInLeft">Projets</h2>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3 animate__animated animate__zoomIn">
                             <div class="card-body">
                                 <h3 class="card-title">Application de Gestion des Assistances Techniques</h3>
                                 <p class="card-text">Technologies: Spring Boot, Thymeleaf, JavaScript</p>
@@ -170,7 +171,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3 animate__animated animate__zoomIn">
                             <div class="card-body">
                                 <h3 class="card-title">Outil d’Automatisation de Tests pour Satellites</h3>
                                 <p class="card-text">Technologies: JavaScript, SVG, HTML</p>
@@ -184,8 +185,8 @@
 
         <section id="projet-jeu" class="p-5 bg-light">
             <div class="container">
-                <h2>Mon Jeu: Feu-Eau</h2>
-                <div class="card mb-3">
+                <h2 class="animate__animated animate__fadeInRight">Mon Jeu: Feu-Eau</h2>
+                <div class="card mb-3 animate__animated animate__zoomIn">
                     <div class="card-body">
                         <h3 class="card-title">Feu-Eau</h3>
                         <p class="card-text">Feu-Eau est un jeu inspiré du jeu "Fille Eau Garçon Feu". Il se joue en collaboration soit sur le même clavier, soit en réseau. Développé en Java et JavaFX, il offre une expérience de jeu interactive et engageante.</p>
@@ -197,10 +198,10 @@
 
         <section id="projets-scolaires" class="p-5">
             <div class="container">
-                <h2>Projets Scolaires</h2>
+                <h2 class="animate__animated animate__fadeInLeft">Projets Scolaires</h2>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3 animate__animated animate__zoomIn">
                             <div class="card-body">
                                 <h3 class="card-title">Projet Scolaire 1</h3>
                                 <p class="card-text">Description: Description du projet scolaire 1.</p>
@@ -208,7 +209,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3 animate__animated animate__zoomIn">
                             <div class="card-body">
                                 <h3 class="card-title">Projet Scolaire 2</h3>
                                 <p class="card-text">Description: Description du projet scolaire 2.</p>
@@ -221,7 +222,7 @@
 
         <section id="contact" class="p-5 bg-light">
             <div class="container">
-                <h2>Contact</h2>
+                <h2 class="animate__animated animate__fadeInRight">Contact</h2>
                 <p>Email: <a href="mailto:remimathieu84@gmail.com"><i class="fas fa-envelope"></i> remimathieu84@gmail.com</a></p>
                 <p>Téléphone: <a href="tel:0656881519"><i class="fas fa-phone"></i> 0656881519</a></p>
                 <p>Adresse: <i class="fas fa-map-marker-alt"></i> 24 rue des Martyrs, 06240 Beausoleil</p>
@@ -231,8 +232,8 @@
 
         <section id="cv" class="p-5">
             <div class="container text-center">
-                <h2>Télécharger mon CV</h2>
-                <a href="ressources/CV_Rémi_MATHIEU.pdf" class="btn btn-primary btn-lg" download><i class="fas fa-download"></i> Télécharger CV</a>
+                <h2 class="animate__animated animate__fadeInUp">Télécharger mon CV</h2>
+                <a href="ressources/CV_Rémi_MATHIEU.pdf" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite" download><i class="fas fa-download"></i> Télécharger CV</a>
             </div>
         </section>
     </main>
@@ -242,5 +243,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
