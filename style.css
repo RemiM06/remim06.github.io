@@ -3,19 +3,54 @@ body {
 }
 
 header {
-    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #007bff, #0056b3);
 }
 
-section {
-    margin-bottom: 2rem;
+footer {
+    background: linear-gradient(45deg, #007bff, #0056b3);
 }
 
 h1, h2 {
     margin-bottom: 1rem;
 }
 
-footer {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+section {
+    margin-bottom: 2rem;
+}
+
+#competences .list-group-item.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+#soft-skills .list-group-item {
+    display: flex;
+    align-items: center;
+}
+
+#soft-skills .list-group-item i {
+    margin-right: 10px;
+}
+
+.card-title {
+    color: #007bff;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.text-center.my-3 a img {
+    transition: transform 0.3s ease;
+}
+
+.text-center.my-3 a img:hover {
+    transform: scale(1.1);
 }
