@@ -2,9 +2,29 @@
 
 /* General Styling */
 body {
-    font-family: 'Montserrat', sans-serif; /* Modern sans-serif font */
+    font-family: 'Montserrat', sans-serif; /* Main body font */
     line-height: 1.6;
     scroll-behavior: smooth;
+}
+
+h1, h2, h3 {
+    font-family: 'Roboto Slab', serif; /* Bold serif for headings */
+    font-weight: 700;
+}
+
+.navbar-brand {
+    font-family: 'Oswald', sans-serif; /* Unique font for the brand */
+    font-weight: 500;
+    font-size: 1.3rem;
+    letter-spacing: 1px; /* Slight letter spacing for emphasis */
+}
+
+.lead {
+    font-family: 'Merriweather', serif; /* Elegant serif for lead paragraphs */
+}
+
+.card-title {
+    font-family: 'Poppins', sans-serif; /* Geometric sans-serif for card titles */
 }
 
 /* Customizing Bootstrap */
