@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Fonction pour afficher les données de géolocalisation
     function displayPosition(position, elementId) {
         const coords = position.coords;
         const data = `
@@ -11,9 +10,20 @@ document.addEventListener('DOMContentLoaded', function() {
             Date: ${new Date(coords.timestamp).toLocaleString()}
         `;
         document.getElementById(elementId).innerHTML = data;
+
+        updateMap(coords.latitude, coords.longitude);
     }
 
-    // Utilisation de getCurrentPosition
+    let map = L.map('map').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    function updateMap(lat, lon) {
+        map.setView([lat, lon], 15);
+        L.marker([lat, lon]).addTo(map);
+    }
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             displayPosition(position, 'currentPositionData');
@@ -22,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('currentPositionData').innerHTML = "La géolocalisation n'est pas supportée par ce navigateur.";
     }
 
-    // Utilisation de watchPosition
     if (navigator.geolocation) {
         const watchId = navigator.geolocation.watchPosition(function(position) {
             displayPosition(position, 'watchPositionData');
