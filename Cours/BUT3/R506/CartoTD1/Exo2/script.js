@@ -23,22 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('motionData').innerHTML = data;
     }
 
-    // Écouteur d'événements pour l'orientation
-    if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', displayOrientation);
-    } else {
-        console.log("L'orientation du dispositif n'est pas supportée par ce navigateur.");
-        document.getElementById('orientationData').innerHTML = "L'orientation du dispositif n'est pas supportée par ce navigateur.";
-    }
-
-    // Écouteur d'événements pour le mouvement
-    if (window.DeviceMotionEvent) {
-        window.addEventListener('devicemotion', displayMotion);
-    } else {
-        console.log("Le mouvement du dispositif n'est pas supporté par ce navigateur.");
-        document.getElementById('motionData').innerHTML = "Le mouvement du dispositif n'est pas supporté par ce navigateur.";
-    }
-
     // Initialiser la carte
     let map = L.map('map').setView([0, 0], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -65,17 +49,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Utilisation de getCurrentPosition pour initialiser la carte
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const coords = position.coords;
-            updateMap(coords.latitude, coords.longitude);
-        }, function(error) {
-            console.error("Erreur de géolocalisation : ", error);
-            document.getElementById('map').innerHTML = "Erreur de géolocalisation : " + error.message;
-        });
-    } else {
-        console.log("La géolocalisation n'est pas supportée par ce navigateur.");
-        document.getElementById('map').innerHTML = "La géolocalisation n'est pas supportée par ce navigateur.";
+    // Fonction pour demander l'autorisation de géolocalisation
+    function requestPermissions() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const coords = position.coords;
+                updateMap(coords.latitude, coords.longitude);
+            }, function(error) {
+                console.error("Erreur de géolocalisation : ", error);
+                document.getElementById('map').innerHTML = "Erreur de géolocalisation : " + error.message;
+            });
+        } else {
+            console.log("La géolocalisation n'est pas supportée par ce navigateur.");
+            document.getElementById('map').innerHTML = "La géolocalisation n'est pas supportée par ce navigateur.";
+        }
+
+        // Écouteur d'événements pour l'orientation
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', displayOrientation);
+        } else {
+            console.log("L'orientation du dispositif n'est pas supportée par ce navigateur.");
+            document.getElementById('orientationData').innerHTML = "L'orientation du dispositif n'est pas supportée par ce navigateur.";
+        }
+
+        // Écouteur d'événements pour le mouvement
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', displayMotion);
+        } else {
+            console.log("Le mouvement du dispositif n'est pas supporté par ce navigateur.");
+            document.getElementById('motionData').innerHTML = "Le mouvement du dispositif n'est pas supporté par ce navigateur.";
+        }
     }
+
+    // Ajouter un écouteur d'événements au bouton
+    document.getElementById('requestPermissions').addEventListener('click', requestPermissions);
 });
