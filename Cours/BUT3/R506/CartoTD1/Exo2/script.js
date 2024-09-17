@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
             Gamma: ${event.gamma}
         `;
         document.getElementById('orientationData').innerHTML = data;
+
+        // Mettre à jour l'orientation du marqueur sur la carte
+        updateMarkerOrientation(event.alpha);
     }
 
     // Fonction pour afficher les données de mouvement
@@ -42,10 +45,24 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    // Variable pour stocker le marqueur
+    let marker;
+
     // Fonction pour mettre à jour la carte avec la nouvelle position
     function updateMap(lat, lon) {
         map.setView([lat, lon], 15);
-        L.marker([lat, lon]).addTo(map);
+        if (marker) {
+            marker.setLatLng([lat, lon]);
+        } else {
+            marker = L.marker([lat, lon]).addTo(map);
+        }
+    }
+
+    // Fonction pour mettre à jour l'orientation du marqueur
+    function updateMarkerOrientation(alpha) {
+        if (marker) {
+            marker.setRotationAngle(alpha);
+        }
     }
 
     // Utilisation de getCurrentPosition pour initialiser la carte
