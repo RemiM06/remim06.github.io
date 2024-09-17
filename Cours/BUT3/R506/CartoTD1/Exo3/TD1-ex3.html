@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touch Events</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #drawingCanvas {
+            border: 1px solid #000;
+            touch-action: none; /* Prevents default touch actions */
+        }
+        .event-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Touch Events Demo</h1>
+        <div class="mt-4 text-center">
+            <a href="../../index.html" class="btn btn-primary">Lien vers les TD - R506</a>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <canvas id="drawingCanvas" width="600" height="400"></canvas>
+            </div>
+            <div class="col-md-4">
+                <div class="event-info">
+                    <h4>Position Touchée</h4>
+                    <p id="position">Aucune</p>
+                </div>
+                <div class="event-info">
+                    <h4>Type d'Événement</h4>
+                    <p id="eventType">Aucun</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('drawingCanvas');
+            const ctx = canvas.getContext('2d');
+            const positionDisplay = document.getElementById('position');
+            const eventTypeDisplay = document.getElementById('eventType');
+
+            // Fonction pour mettre à jour la position touchée
+            function updatePosition(x, y) {
+                positionDisplay.textContent = `X: ${x}, Y: ${y}`;
+            }
+
+            // Fonction pour dessiner sur le canevas
+            function draw(x, y) {
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = 'black';
+                ctx.fill();
+            }
+
+            // Gestion des événements touch
+            function handleTouch(event) {
+                event.preventDefault(); // Empêche le comportement par défaut des événements touch
+                const touch = event.touches[0];
+                const x = touch.clientX - canvas.getBoundingClientRect().left;
+                const y = touch.clientY - canvas.getBoundingClientRect().top;
+                updatePosition(x, y);
+
+                if (event.type === 'touchstart') {
+                    eventTypeDisplay.textContent = 'Touch Start';
+                } else if (event.type === 'touchmove') {
+                    eventTypeDisplay.textContent = 'Touch Move';
+                    draw(x, y);
+                } else if (event.type === 'touchend') {
+                    eventTypeDisplay.textContent = 'Touch End';
+                }
+            }
+
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', handleTouch);
+        });
+    </script>
+</body>
+</html>

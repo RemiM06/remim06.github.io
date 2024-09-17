@@ -38,14 +38,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (marker) {
             marker.setLatLng([lat, lon]);
         } else {
-            marker = L.marker([lat, lon]).addTo(map);
+            marker = L.marker([lat, lon], { icon: createRotatedIcon(0) }).addTo(map);
         }
+    }
+
+    // Fonction pour créer une icône avec rotation
+    function createRotatedIcon(rotation) {
+        return L.divIcon({
+            className: 'rotated-icon',
+            html: `<div style="transform: rotate(${rotation}deg);">
+                    <img src="https://example.com/marker-icon.png" style="width: 32px; height: 32px;">
+                </div>`,
+            iconSize: [32, 32]
+        });
     }
 
     // Fonction pour mettre à jour l'orientation du marqueur
     function updateMarkerOrientation(alpha) {
         if (marker) {
-            marker.setRotationAngle(alpha);
+            marker.setIcon(createRotatedIcon(alpha));
         }
     }
 
