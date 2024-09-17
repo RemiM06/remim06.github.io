@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', displayOrientation);
     } else {
+        console.log("L'orientation du dispositif n'est pas supportée par ce navigateur.");
         document.getElementById('orientationData').innerHTML = "L'orientation du dispositif n'est pas supportée par ce navigateur.";
     }
 
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.DeviceMotionEvent) {
         window.addEventListener('devicemotion', displayMotion);
     } else {
+        console.log("Le mouvement du dispositif n'est pas supporté par ce navigateur.");
         document.getElementById('motionData').innerHTML = "Le mouvement du dispositif n'est pas supporté par ce navigateur.";
     }
 
@@ -51,8 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             const coords = position.coords;
             updateMap(coords.latitude, coords.longitude);
+        }, function(error) {
+            console.error("Erreur de géolocalisation : ", error);
+            document.getElementById('map').innerHTML = "Erreur de géolocalisation : " + error.message;
         });
     } else {
+        console.log("La géolocalisation n'est pas supportée par ce navigateur.");
         document.getElementById('map').innerHTML = "La géolocalisation n'est pas supportée par ce navigateur.";
     }
 });
