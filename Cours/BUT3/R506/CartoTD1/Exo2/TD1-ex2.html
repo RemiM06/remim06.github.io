@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientation et Mouvement du Smartphone</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Orientation et Mouvement du Smartphone</h1>
+        <div class="card mt-4">
+            <div class="card-header">
+                Données d'Orientation
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Alpha, Beta, Gamma</h5>
+                <p class="card-text" id="orientationData"></p>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-header">
+                Données de Mouvement
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Accélération et Rotation</h5>
+                <p class="card-text" id="motionData"></p>
+            </div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
