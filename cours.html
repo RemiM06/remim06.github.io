@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arborescence des Cours</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ul {
+            list-style-type: none;
+        }
+        li::before {
+            content: "📂"; /* Utilise une icône de dossier pour les répertoires */
+            margin-right: 8px;
+        }
+        li.file::before {
+            content: "📄"; /* Utilise une icône de fichier pour les fichiers */
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-primary text-white text-center p-3">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Rémi Mathieu</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="cours.html">Cours</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mt-5">
+        <h1 class="text-center mb-4">Arborescence des Cours</h1>
+        <ul>
+            <li>S5
+                <ul>
+                    <li class="file">PPP</li>
+                    <li class="file">R505 – Programmation avancée</li>
+                    <li>R506 – Sensibilisation à la programmation multimédia
+                        <ul>
+                            <li>CoursGeo
+                                <ul>
+                                    <li class="file">cours1</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>R507 – Automatisation de la chaîne de production
+                        <ul>
+                            <li class="file">S01</li>
+                        </ul>
+                    </li>
+                    <li>R508 – Qualité de développement
+                        <ul>
+                            <li class="file">Seance 1 – Commandes linux</li>
+                        </ul>
+                    </li>
+                    <li>R511 – Méthodes d'optimisation pour l'aide à la décision
+                        <ul>
+                            <li class="file">S01</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </main>
+
+    <footer class="bg-primary text-white text-center p-3 mt-5">
+        <p>&copy; 2024 Rémi Mathieu</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
