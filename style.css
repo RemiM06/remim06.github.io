@@ -1,77 +1,115 @@
+/* styles.css */
+
+/* General Styling */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Montserrat', sans-serif; /* Main body font */
+    line-height: 1.6;
+    scroll-behavior: smooth;
 }
 
-header {
-    background: linear-gradient(45deg, #007bff, #0056b3);
+h1, h2, h3 {
+    font-family: 'Roboto Slab', serif; /* Bold serif for headings */
+    font-weight: 700;
 }
 
-footer {
-    background: linear-gradient(45deg, #007bff, #0056b3);
+.navbar-brand {
+    font-family: 'Oswald', sans-serif; /* Unique font for the brand */
+    font-weight: 500;
+    font-size: 1.3rem;
+    letter-spacing: 1px; /* Slight letter spacing for emphasis */
 }
 
-h1, h2 {
-    margin-bottom: 1rem;
-}
-
-section {
-    margin-bottom: 2rem;
-}
-
-#competences .list-group-item.active, 
-#competences .list-group-item {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-}
-
-#soft-skills .list-group-item {
-    display: flex;
-    align-items: center;
-}
-
-#soft-skills .list-group-item i {
-    margin-right: 10px;
+.lead {
+    font-family: 'Merriweather', serif; /* Elegant serif for lead paragraphs */
 }
 
 .card-title {
-    color: #007bff;
+    font-family: 'Poppins', sans-serif; /* Geometric sans-serif for card titles */
 }
 
-a {
-    color: #007bff;
-    text-decoration: none;
+/* Customizing Bootstrap */
+.bg-primary {
+    background-color: #007bff !important; /* Use Bootstrap's primary blue */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
 }
 
-a:hover {
-    color: #0056b3;
-    text-decoration: underline;
+.navbar-brand {
+    font-weight: 600; /* Bolder brand name */
+    font-size: 1.2rem;
 }
 
-.text-center.my-3 a img {
-    transition: transform 0.3s ease;
+.nav-link {
+    transition: color 0.3s ease; /* Smooth color transition on hover */
 }
 
-.text-center.my-3 a img:hover {
-    transform: scale(1.1);
+.nav-link:hover {
+    color: #f8f9fa !important; /* White text on hover */
 }
 
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #0056b3 !important; /* Slightly darker primary blue */
+    border-color: #0056b3 !important;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+/* Section Styling */
+section {
+    padding: 5rem 0; /* Consistent spacing */
 }
 
-:focus {
-    outline: 2px solid #0056b3;
-    outline-offset: 2px;
+#accueil {
+    background-image: url("images/background-image.jpg"); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    color: #fff; /* White text for contrast */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Subtle text shadow */
 }
 
+#accueil h1 {
+    font-size: 3.5rem; /* Larger heading */
+    margin-bottom: 1.5rem;
+}
+
+#accueil .lead {
+    font-size: 1.2rem;
+}
+
+/* Animated Elements */
 .animate__animated {
-    --animate-duration: 1s;
+    opacity: 0;
+    animation-duration: 1s;
+    animation-fill-mode: both; /* Ensure elements stay visible after animation */
+}
+
+/* Additional Animations */
+.animate__slideInUp {
+    animation-name: slideInUp; /* Using Animate.css class */
+}
+
+#competences .list-group-item {
+    animation-name: fadeIn;
+    animation-delay: calc(0.2s * var(--animation-order)); /* Staggered fade-in */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) { 
+    #accueil h1 {
+        font-size: 2.5rem; 
+    }
+}
+
+.back-to-top-btn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99; /* Ensure it's above other elements */
+    border-radius: 50%; /* Make it a circle */
+    width: 40px;
+    height: 40px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease; /* Smooth transition on hover */
+}
+
+.back-to-top-btn:hover {
+    opacity: 1;
 }
