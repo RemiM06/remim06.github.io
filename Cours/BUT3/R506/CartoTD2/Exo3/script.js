@@ -6,17 +6,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'OpenStreetMap contributors'
 }).addTo(map);
 
-// Charger les données GeoJSON (exemple depuis OpenData Nice Côte d’Azur)
-var geojsonUrl = 'URL_DES_DONNÉES_GEOJSON'; // Remplacer par une URL valide depuis les sources indiquées
+var geojsonUrl = 'https://opendata.nicecotedazur.org/data/storage/f/2024-07-01T09%3A00%3A15.462Z/routes-metropolitaines.geojson'; 
 
-// Récupérer et afficher les données GeoJSON
 fetch(geojsonUrl)
     .then(response => response.json())
     .then(data => {
-        // Ajouter les données GeoJSON à la carte
         L.geoJSON(data, {
             onEachFeature: function (feature, layer) {
-                // Afficher les propriétés de chaque entité dans un popup
                 if (feature.properties && feature.properties.name) {
                     layer.bindPopup("Nom : " + feature.properties.name);
                 }
@@ -27,10 +23,8 @@ fetch(geojsonUrl)
         console.error('Erreur lors du chargement des données GeoJSON:', error);
     });
 
-// BONUS : Afficher un trajet/route avec MapBox Directions API
 var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/5.4,43.3;7.26,43.7?geometries=geojson&access_token=pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA';
 
-// Récupérer le trajet depuis l'API de MapBox
 fetch(routeUrl)
     .then(response => response.json())
     .then(data => {
