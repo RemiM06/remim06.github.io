@@ -1,12 +1,10 @@
-// Initialisation de la carte avec une vue sur le Triangle des Bermudes
 var map = L.map('map').setView([25.774, -80.19], 4);
 
 // Ajout de la carte Stadia Maps
-L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=VOTRE_CLE_API', {
+L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
     attribution: '<a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, <a href="https://www.stamen.com/" target="_blank">Stamen Design</a>, <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>, <a href="https://www.openstreetmap.org/copyright/" target="_blank">OpenStreetMap</a>'
 }).addTo(map);
 
-// Définition du Triangle des Bermudes
 var bermudaTriangle = L.polygon([
     [25.774, -80.19],
     [18.466, -66.118],
@@ -30,18 +28,14 @@ if (navigator.geolocation) {
         var userLng = position.coords.longitude;
         var accuracy = position.coords.accuracy;
 
-        // Ajout d'un marqueur pour la position de l'utilisateur et d'un cercle de précision
         var userMarker = L.marker([userLat, userLng]).addTo(map).bindPopup("Votre position");
         userMarker.openPopup();
         L.circle([userLat, userLng], { radius: accuracy }).addTo(map);
 
-        // Segment entre Marseille et Nice
         L.polyline([marseille, nice], { color: 'blue' }).addTo(map).bindPopup("Segment entre Marseille et Nice");
 
-        // Calcul de la distance entre Marseille et la position de l'utilisateur
-        var distanceToMarseille = map.distance(marseille, [userLat, userLng]) / 1000; // Distance en kilomètres
+        var distanceToMarseille = map.distance(marseille, [userLat, userLng]) / 1000;
         
-        // Ajout d'un marqueur pour afficher la distance à Marseille
         userMarker.bindPopup("Votre position<br>Distance à Marseille : " + distanceToMarseille.toFixed(2) + " km").openPopup();
     });
 } else {
