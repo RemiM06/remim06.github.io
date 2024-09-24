@@ -27,14 +27,13 @@ if (navigator.geolocation) {
         var userLat = position.coords.latitude;
         var userLng = position.coords.longitude;
         var accuracy = position.coords.accuracy;
-        var userPos = [userLat, userLng];
 
         var userMarker = L.marker([userLat, userLng]).addTo(map).bindPopup("Votre position");
         userMarker.openPopup();
         L.circle([userLat, userLng], { radius: accuracy }).addTo(map);
 
         L.polyline([marseille, nice], { color: 'blue' }).addTo(map).bindPopup("Segment entre Marseille et Nice");
-        L.polyline([userPos, marseille], { color: 'blue' }).addTo(map).bindPopup("Segment entre votre position et Marseille");
+        L.polyline([marseille, [userLat, userLng]], { color: 'red' }).addTo(map).bindPopup("Segment entre votre position et Marseille");
 
         var distanceToMarseille = map.distance(marseille, [userLat, userLng]) / 1000;
         
