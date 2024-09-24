@@ -2,7 +2,7 @@
 var map = L.map('map').setView([25.774, -80.19], 4);
 
 // Ajout de la carte Stadia Maps
-L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.jpg', {
+L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png', {
     attribution: '<a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>Stadia Maps</a>, <a href="https://www.stamen.com/" target="_blank">Stamen Design</a>, <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>, <a href="https://www.openstreetmap.org/copyright/" target="_blank">OpenStreetMap</a>'
 }).addTo(map);
 
