@@ -1,0 +1,32 @@
+{
+    "metadata": {
+      "version": 4.5,
+      "type": "Object",
+      "generator": "ObjectExporter"
+    },
+    "geometries": [
+      {
+        "uuid": "unique-geometry-id",
+        "type": "BoxGeometry",
+        "width": 1,
+        "height": 1,
+        "depth": 1
+      }
+    ],
+    "materials": [
+      {
+        "uuid": "unique-material-id",
+        "type": "MeshBasicMaterial",
+        "color": 16711680,
+        "transparent": false
+      }
+    ],
+    "object": {
+      "uuid": "unique-object-id",
+      "type": "Mesh",
+      "geometry": "unique-geometry-id",
+      "material": "unique-material-id",
+      "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    }
+  }
+  
