@@ -10,7 +10,6 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Ajout de lumière
 const light = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(light);
 
@@ -100,13 +99,24 @@ function enableMotionAndOrientation() {
 
 function handleDeviceOrientation(event) {
     if (cube) {
-        const { alpha, beta, gamma } = event;
-        const alphaRad = THREE.MathUtils.degToRad(alpha);
+        const { beta, gamma } = event;
+        
         const betaRad = THREE.MathUtils.degToRad(beta);
         const gammaRad = THREE.MathUtils.degToRad(gamma);
-        cube.rotation.x = betaRad;
-        cube.rotation.y = gammaRad;
-        cube.rotation.z = alphaRad;
+        
+        const moveX = Math.sin(gammaRad) * 0.1;
+        const moveY = Math.sin(betaRad) * 0.1;
+        
+        cube.position.x += moveX;
+        cube.position.y -= moveY;
+        
+        const maxRadius = 5;
+        const distance = Math.sqrt(cube.position.x ** 2 + cube.position.y ** 2);
+        if (distance > maxRadius) {
+            const ratio = maxRadius / distance;
+            cube.position.x *= ratio;
+            cube.position.y *= ratio;
+        }
     }
 }
 
