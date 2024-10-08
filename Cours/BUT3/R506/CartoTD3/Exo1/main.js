@@ -1,7 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
 
 const scene = new THREE.Scene();
-
 scene.fog = new THREE.Fog(0xcccccc, 5, 15);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -10,6 +9,14 @@ camera.position.z = 5;
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+// Ajout de lumière
+const light = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(light);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+directionalLight.position.set(0, 1, 0);
+scene.add(directionalLight);
 
 const objectLoader = new THREE.ObjectLoader();
 
@@ -31,13 +38,10 @@ objectLoader.load(
     }
 );
 
- 
+// Effet de pluie
 let rain;
-
-const rainParticles = [];
 const rainGeometry = new THREE.BufferGeometry();
-const rainMaterial = new THREE.PointsMaterial({ color: 0xaaaaaa, size: 0.1 });
-
+const rainMaterial = new THREE.PointsMaterial({ color: 0xaaaaaa, size: 0.02 });
 const rainCount = 1000;
 const rainPositions = new Float32Array(rainCount * 3);
 
@@ -48,7 +52,6 @@ for (let i = 0; i < rainCount; i++) {
 }
 
 rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
-
 rain = new THREE.Points(rainGeometry, rainMaterial);
 scene.add(rain);
 
@@ -66,19 +69,11 @@ function animate() {
 
     renderer.render(scene, camera);
 }
-animate();
-
-window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-});
 
 function updateRain() {
     const positions = rain.geometry.attributes.position.array;
     for (let i = 0; i < rainCount; i++) {
         positions[i * 3 + 1] -= 0.1;
-
         if (positions[i * 3 + 1] < -10) {
             positions[i * 3 + 1] = 10;
         }
@@ -86,25 +81,53 @@ function updateRain() {
     rain.geometry.attributes.position.needsUpdate = true;
 }
 
-window.addEventListener('deviceorientation', (event) => {
+// Gestion des événements de dispositif
+function enableMotionAndOrientation() {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+            .then(response => {
+                if (response == 'granted') {
+                    window.addEventListener('devicemotion', handleDeviceMotion);
+                    window.addEventListener('deviceorientation', handleDeviceOrientation);
+                }
+            })
+            .catch(console.error);
+    } else {
+        window.addEventListener('devicemotion', handleDeviceMotion);
+        window.addEventListener('deviceorientation', handleDeviceOrientation);
+    }
+}
+
+function handleDeviceOrientation(event) {
     if (cube) {
         const { alpha, beta, gamma } = event;
-
         const alphaRad = THREE.MathUtils.degToRad(alpha);
         const betaRad = THREE.MathUtils.degToRad(beta);
         const gammaRad = THREE.MathUtils.degToRad(gamma);
-
         cube.rotation.x = betaRad;
         cube.rotation.y = gammaRad;
         cube.rotation.z = alphaRad;
     }
-});
+}
 
-window.addEventListener('devicemotion', (event) => {
+function handleDeviceMotion(event) {
     if (cube) {
         const { acceleration } = event;
         cube.position.x += acceleration.x * 0.01;
         cube.position.y += acceleration.y * 0.01;
         cube.position.z += acceleration.z * 0.01;
     }
+}
+
+// Gestion du redimensionnement de la fenêtre
+window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 });
+
+// Démarrage de l'animation
+animate();
+
+// Ajoutez un bouton dans votre HTML pour activer les capteurs
+document.getElementById('enableMotion').addEventListener('click', enableMotionAndOrientation);
