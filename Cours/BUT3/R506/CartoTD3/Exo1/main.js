@@ -25,6 +25,9 @@ objectLoader.load(
     },
     function (xhr) {
         console.log((xhr.loaded / xhr.total * 100) + '% chargé');
+    },
+    function (error) {
+        console.error('Une erreur s\'est produite lors du chargement du modèle:', error);
     }
 );
 
