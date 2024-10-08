@@ -1,19 +1,14 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0xcccccc, 5, 15);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 10);
+camera.position.z = 5;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
 
 const light = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(light);
@@ -70,8 +65,6 @@ function animate() {
     if (rain) {
         updateRain();
     }
-
-    controls.update();
 
     renderer.render(scene, camera);
 }
@@ -141,7 +134,6 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    controls.update();
 });
 
 // Démarrage de l'animation
