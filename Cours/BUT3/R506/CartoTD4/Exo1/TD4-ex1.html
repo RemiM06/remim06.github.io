@@ -10,7 +10,7 @@
 </head>
 <body>
     <script>
-        let scene, camera, renderer, earth, userMarker, countryMarkers = [];
+        let scene, camera, renderer, earth, userMarker;
 
         function init() {
             // Création de la scène, caméra et renderer
@@ -22,7 +22,7 @@
 
             // Création de la Terre
             const geometry = new THREE.SphereGeometry(1, 32, 32);
-            const texture = new THREE.TextureLoader().load('ear0xuu2.jpg');
+            const texture = new THREE.TextureLoader().load('path/to/earth_texture.jpg');
             const material = new THREE.MeshPhongMaterial({ map: texture });
             earth = new THREE.Mesh(geometry, material);
             scene.add(earth);
@@ -45,12 +45,11 @@
                 });
             }
 
-            // Récupération des positions de pays
             fetch('https://restcountries.com/v3.1/all')
                 .then(response => response.json())
                 .then(data => {
                     data.slice(0, 10).forEach(country => {
-                        if (country.latlng) {
+                        if (country.latlng && country.flags && country.flags.png) {
                             addCountryMarker(country.latlng[0], country.latlng[1], country.flags.png);
                         }
                     });
@@ -78,14 +77,22 @@
         }
 
         function addCountryMarker(lat, lon, flagUrl) {
-            const geometry = new THREE.SphereGeometry(0.01, 32, 32);
-            const texture = new THREE.TextureLoader().load(flagUrl);
-            const material = new THREE.MeshBasicMaterial({ map: texture });
-            const marker = new THREE.Mesh(geometry, material);
-            const position = latLongToVector3(lat, lon);
-            marker.position.copy(position);
-            scene.add(marker);
-            countryMarkers.push(marker);
+            const loader = new THREE.TextureLoader();
+            
+            loader.load(flagUrl,
+                function(texture) {
+                    const geometry = new THREE.SphereGeometry(0.01, 32, 32);
+                    const material = new THREE.MeshBasicMaterial({ map: texture });
+                    const marker = new THREE.Mesh(geometry, material);
+                    const position = latLongToVector3(lat, lon);
+                    marker.position.copy(position.multiplyScalar(1.01)); // Légèrement au-dessus de la surface
+                    scene.add(marker);
+                },
+                undefined,
+                function(err) {
+                    console.error('Erreur lors du chargement du drapeau:', err);
+                }
+            );
         }
 
         function animate() {
