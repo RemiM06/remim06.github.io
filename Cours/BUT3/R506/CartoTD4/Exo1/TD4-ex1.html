@@ -1,115 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Géolocalisation et 3D avec Three.js</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>Interaction 3D avec Three.js et Leaflet.js</title>
     <style>
-        body { margin: 0; }
-        canvas { display: block; }
+        body { margin: 0; display: flex; }
+        #map { height: 100vh; width: 50%; }
+        #globe { height: 100vh; width: 50%; }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
-    <script>
-        let scene, camera, renderer, earth, userMarker;
 
-        function init() {
-            // Création de la scène, caméra et renderer
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+<div id="map"></div>
+<div id="globe"></div>
 
-            // Création de la Terre
-            const geometry = new THREE.SphereGeometry(1, 32, 32);
-            const texture = new THREE.TextureLoader().load('nasa-earth.jpg');
-            const material = new THREE.MeshPhongMaterial({ map: texture });
-            earth = new THREE.Mesh(geometry, material);
-            scene.add(earth);
+<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
-            // Ajout d'une lumière ambiante
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/"
+    }
+}
+</script>
 
-            // Ajout d'une lumière directionnelle
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(5, 3, 5);
-            scene.add(directionalLight);
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-            camera.position.z = 3;
+    // Setup Leaflet map
+    const map = L.map('map').setView([51.505, -0.09], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-            // Géolocalisation de l'utilisateur
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    addUserMarker(position.coords.latitude, position.coords.longitude);
-                });
-            }
+    // Setup Three.js scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight / 2, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth / 2, window.innerHeight);
+    document.getElementById('globe').appendChild(renderer.domElement);
 
-            fetch('https://restcountries.com/v3.1/all')
-                .then(response => response.json())
-                .then(data => {
-                    data.slice(0, 10).forEach(country => {
-                        if (country.latlng && country.flags && country.flags.png) {
-                            addCountryMarker(country.latlng[0], country.latlng[1], country.flags.png);
-                        }
-                    });
-                });
+    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const texture = new THREE.TextureLoader().load('nasa-earth.jpg');
+    const material = new THREE.MeshPhongMaterial({ map: texture });
+    const earth = new THREE.Mesh(geometry, material);
+    scene.add(earth);
 
-            animate();
-        }
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
 
-        function latLongToVector3(lat, lon) {
-            const phi = (90 - lat) * (Math.PI / 180);
-            const theta = (lon + 180) * (Math.PI / 180);
-            const x = -Math.sin(phi) * Math.cos(theta);
-            const z = Math.sin(phi) * Math.sin(theta);
-            const y = Math.cos(phi);
-            return new THREE.Vector3(x, y, z);
-        }
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
 
-        function addUserMarker(lat, lon) {
-            const geometry = new THREE.SphereGeometry(0.02, 32, 32);
-            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            userMarker = new THREE.Mesh(geometry, material);
-            const position = latLongToVector3(lat, lon);
-            userMarker.position.copy(position);
-            scene.add(userMarker);
-        }
+    camera.position.z = 3;
+    
+    const controls = new OrbitControls(camera, renderer.domElement);
 
-        function addCountryMarker(lat, lon, flagUrl) {
-            const loader = new THREE.TextureLoader();
-            
-            loader.load(flagUrl,
-                function(texture) {
-                    const geometry = new THREE.SphereGeometry(0.01, 32, 32);
-                    const material = new THREE.MeshBasicMaterial({ map: texture });
-                    const marker = new THREE.Mesh(geometry, material);
-                    const position = latLongToVector3(lat, lon);
-                    marker.position.copy(position.multiplyScalar(1.01)); // Légèrement au-dessus de la surface
-                    scene.add(marker);
-                },
-                undefined,
-                function(err) {
-                    console.error('Erreur lors du chargement du drapeau:', err);
+    // Add markers to the globe and map
+    fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(country => {
+                if (country.region === "Europe" && country.latlng) {
+                    addCountryMarker(country.latlng[0], country.latlng[1], country.flags.png);
                 }
-            );
-        }
+            });
+        });
 
-        function animate() {
-            requestAnimationFrame(animate);
-            earth.rotation.y += 0.001;
-            renderer.render(scene, camera);
-        }
+    function latLongToVector3(lat, lon) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lon + 180) * (Math.PI / 180);
+        const x = -Math.sin(phi) * Math.cos(theta);
+        const z = Math.sin(phi) * Math.sin(theta);
+        const y = Math.cos(phi);
+        return new THREE.Vector3(x, y, z);
+    }
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
+    function addCountryMarker(lat, lon, flagUrl) {
+        // Add marker on the map
+        L.marker([lat, lon]).addTo(map).on('click', () => {
+            focusOnCountry(lat, lon);
+        });
 
-        window.addEventListener('resize', onWindowResize, false);
+        // Add marker on the globe
+        const loader = new THREE.TextureLoader();
+        loader.load(flagUrl,
+            function(texture) {
+                const geometry = new THREE.SphereGeometry(0.01, 32, 32);
+                const material = new THREE.MeshBasicMaterial({ map: texture });
+                const marker = new THREE.Mesh(geometry, material);
+                const position = latLongToVector3(lat, lon);
+                marker.position.copy(position.multiplyScalar(1.01));
+                earth.add(marker); 
+            },
+            undefined,
+            function(err) {
+                console.error('Erreur lors du chargement du drapeau:', err);
+            }
+        );
+    }
 
-        init();
-    </script>
+    function focusOnCountry(lat, lon) {
+        const targetPosition = latLongToVector3(lat, lon).multiplyScalar(3); // Adjust distance as needed
+        camera.position.lerp(targetPosition, 0.1); // Smooth transition
+        controls.update();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        earth.rotation.y += 0.001;
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+</script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </body>
 </html>
