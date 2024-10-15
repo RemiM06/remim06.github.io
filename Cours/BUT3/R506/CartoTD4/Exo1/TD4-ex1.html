@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Géolocalisation et 3D avec Three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script>
+        let scene, camera, renderer, earth, userMarker, countryMarkers = [];
+
+        function init() {
+            // Création de la scène, caméra et renderer
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Création de la Terre
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const texture = new THREE.TextureLoader().load('path/to/earth_texture.jpg');
+            const material = new THREE.MeshPhongMaterial({ map: texture });
+            earth = new THREE.Mesh(geometry, material);
+            scene.add(earth);
+
+            // Ajout d'une lumière ambiante
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            // Ajout d'une lumière directionnelle
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(5, 3, 5);
+            scene.add(directionalLight);
+
+            camera.position.z = 3;
+
+            // Géolocalisation de l'utilisateur
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    addUserMarker(position.coords.latitude, position.coords.longitude);
+                });
+            }
+
+            // Récupération des positions de pays
+            fetch('https://restcountries.com/v3.1/all')
+                .then(response => response.json())
+                .then(data => {
+                    data.slice(0, 10).forEach(country => {
+                        if (country.latlng) {
+                            addCountryMarker(country.latlng[0], country.latlng[1], country.flags.png);
+                        }
+                    });
+                });
+
+            animate();
+        }
+
+        function latLongToVector3(lat, lon) {
+            const phi = (90 - lat) * (Math.PI / 180);
+            const theta = (lon + 180) * (Math.PI / 180);
+            const x = -Math.sin(phi) * Math.cos(theta);
+            const z = Math.sin(phi) * Math.sin(theta);
+            const y = Math.cos(phi);
+            return new THREE.Vector3(x, y, z);
+        }
+
+        function addUserMarker(lat, lon) {
+            const geometry = new THREE.SphereGeometry(0.02, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            userMarker = new THREE.Mesh(geometry, material);
+            const position = latLongToVector3(lat, lon);
+            userMarker.position.copy(position);
+            scene.add(userMarker);
+        }
+
+        function addCountryMarker(lat, lon, flagUrl) {
+            const geometry = new THREE.SphereGeometry(0.01, 32, 32);
+            const texture = new THREE.TextureLoader().load(flagUrl);
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const marker = new THREE.Mesh(geometry, material);
+            const position = latLongToVector3(lat, lon);
+            marker.position.copy(position);
+            scene.add(marker);
+            countryMarkers.push(marker);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            earth.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize, false);
+
+        init();
+    </script>
+</body>
+</html>
