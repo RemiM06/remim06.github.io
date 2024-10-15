@@ -4,8 +4,8 @@
     <title>Interaction 3D avec Three.js et Leaflet.js</title>
     <style>
         body { margin: 0; display: flex; }
-        #map { height: 100vh; width: 50%; }
-        #globe { height: 100vh; width: 50%; }
+        #map { height: 100vh; width: 50vw; }
+        #globe { height: 100vh; width: 50vw; }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
@@ -29,19 +29,24 @@
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    // Setup Leaflet map
     const map = L.map('map').setView([51.505, -0.09], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Setup Three.js scene
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight / 2, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, (window.innerWidth / 2) / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth / 2, window.innerHeight);
     document.getElementById('globe').appendChild(renderer.domElement);
+
+    window.addEventListener('resize', () => {
+        const aspect = (window.innerWidth / 2) / window.innerHeight;
+        camera.aspect = aspect;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth / 2, window.innerHeight);
+    });
 
     const geometry = new THREE.SphereGeometry(1, 32, 32);
     const texture = new THREE.TextureLoader().load('nasa-earth.jpg');
@@ -60,7 +65,6 @@
     
     const controls = new OrbitControls(camera, renderer.domElement);
 
-    // Add markers to the globe and map
     fetch('https://restcountries.com/v3.1/all')
         .then(response => response.json())
         .then(data => {
@@ -81,12 +85,10 @@
     }
 
     function addCountryMarker(lat, lon, flagUrl) {
-        // Add marker on the map
         L.marker([lat, lon]).addTo(map).on('click', () => {
             focusOnCountry(lat, lon);
         });
 
-        // Add marker on the globe
         const loader = new THREE.TextureLoader();
         loader.load(flagUrl,
             function(texture) {
@@ -105,15 +107,26 @@
     }
 
     function focusOnCountry(lat, lon) {
-        const targetPosition = latLongToVector3(lat, lon).multiplyScalar(3); // Adjust distance as needed
-        camera.position.lerp(targetPosition, 0.1); // Smooth transition
+        const targetPosition = latLongToVector3(lat, lon).multiplyScalar(1.5); // Adjust distance as needed
+
+        // Create a smooth transition to the target position
+        gsap.to(camera.position, {
+            x: targetPosition.x,
+            y: targetPosition.y,
+            z: targetPosition.z,
+            duration: 1,
+            onUpdate: () => controls.update()
+        });
+
+        camera.lookAt(latLongToVector3(lat, lon));
+        
+        controls.target.copy(latLongToVector3(lat, lon));
         controls.update();
     }
 
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
-        earth.rotation.y += 0.001;
         renderer.render(scene, camera);
     }
 
@@ -121,5 +134,6 @@
 
 </script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 </body>
 </html>
