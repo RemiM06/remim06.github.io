@@ -38,7 +38,6 @@ fetch(geojsonUrl)
 // URL pour afficher un trajet entre Marseille et Nice en utilisant MapBox Directions API
 var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/5.4,43.3;7.26,43.7?geometries=geojson&access_token=pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA';
 
-// Effectuer une requête GET pour récupérer le trajet depuis l'API de MapBox
 fetch(routeUrl)
     .then(response => {
         if (!response.ok) {
